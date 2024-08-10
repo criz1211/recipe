@@ -1,6 +1,7 @@
 import streamlit as st
 import openai 
 import json
+import requests
 
 openai.api_key = "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"
 
@@ -33,7 +34,7 @@ if len(prompt) < 1000:
         })
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': f'Bearer {openai_api_key}'
+            'Authorization': f'Bearer {api_key}'
         }
         response = requests.post(url, headers=headers, data=payload)
         if response.status_code == 200:
