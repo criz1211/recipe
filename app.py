@@ -6,7 +6,6 @@ import requests
 # Set up your OpenAI API key
 #openai.api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = st.secrets['api_key']
-#openai.api_key = "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"
 
 def get_openai_response(prompt):
     try:
