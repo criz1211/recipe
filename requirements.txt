@@ -1,2 +1,0 @@
-openai=0.26.5
-steamlit=1.17.0
