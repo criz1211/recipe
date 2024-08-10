@@ -4,7 +4,6 @@ import json
 import requests
 
 openai.api_key = st.secrets['api_key']
-#openai.api_key = “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”
 
 st.title("Recipes")
 st.header("Getting you deliciously fed")
