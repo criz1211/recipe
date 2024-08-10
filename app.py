@@ -12,14 +12,14 @@ prompt = st.text_area(
 "Tell me what you would like to eat and I'll help you decide! Specify Breakfast, lunch or dinner"
 )
 if len(prompt) < 1000:
-    if st.button("show options"):
+    if st.button("Show options"):
         url = "https://api.openai.com/v1/chat/completions"
         payload = json.dumps({
             "model": "gpt-4",  # Correct model identifier for GPT-4
             "messages": [
                 {
                     "role": "system",
-                    "content": "Act like my personal chef and give me delicious food suggestion based on the following prompt"
+                    "content": "Act like my personal chef and give me delicious food suggestion based on the following prompt:"
                 },
                 {
                     "role": "user",
@@ -34,7 +34,7 @@ if len(prompt) < 1000:
         })
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': f'Bearer {api_key}'
+            'Authorization': f'Bearer {openai.api_key}'
         }
         response = requests.post(url, headers=headers, data=payload)
         if response.status_code == 200:
@@ -45,9 +45,12 @@ if len(prompt) < 1000:
             #return generated_text
         else:
             st.warning(
-                "Input too large"
-
+                "Input too large. Write less than 1000 characters and try again!"
             )
             #print(f"Error from OpenAI: {response.status_code}")
             #print(f"Error from OpenAI: {response.content.decode()}")
             #return "Error in generating text."
+else:
+    st.warning(
+        "len(prompt) > 1000"
+    )
