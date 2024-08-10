@@ -3,6 +3,46 @@ import streamlit as st
 import json
 import requests
 
+# Set up your OpenAI API key
+#openai.api_key = os.getenv('OPENAI_API_KEY')
+openai.api_key = st.secrets['api_key']
+
+def get_openai_response(prompt):
+    try:
+        # Make a request to OpenAI's chat/completions endpoint
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # You can change this to another model if needed
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
+        return response.choices[0].message['content']
+    except Exception as e:
+        return f"An error occurred: {e}"
+
+# Streamlit UI
+st.title("OpenAI Chat Completion with Streamlit")
+
+# Input from the user
+user_prompt = st.text_area("Enter your prompt:", "Hello, how are you?")
+
+# Button to submit the request
+if st.button("Get Response"):
+    if not openai.api_key:
+        st.error("API key is not set. Please set the OPENAI_API_KEY environment variable.")
+    else:
+        # Get the response from OpenAI
+        result = get_openai_response(user_prompt)
+        st.write("Response from OpenAI:")
+        st.write(result)
+
+
+
+
+
+
+
+""""
 # Set your OpenAI API key (for security, consider using st.secrets or environment variables)
 
 openai.api_key = st.secrets['api_key']
@@ -15,6 +55,8 @@ st.header("Getting you deliciously fed")
 prompt = st.text_area(
     "Tell me what you would like to eat, and I'll help you decide! Specify Breakfast, lunch, or dinner."
 )
+
+
 
 if len(prompt) > 1000:
     st.warning("Input too large. Please write less than 1000 characters and try again.")
@@ -52,3 +94,5 @@ else:
             st.info(generated_text)
         except requests.exceptions.RequestException as e:
             st.error(f"An error occurred: {e}")
+
+"""
