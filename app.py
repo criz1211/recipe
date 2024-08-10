@@ -13,7 +13,7 @@ if st.button("Generate"):
     if prompt:
         # Call the OpenAI API with the provided prompt
         response = openai.Completion.create(
-            #engine="text-davinci-003",  # You can choose any available engine
+            engine="text-davinci-003",  # You can choose any available engine
             prompt=prompt,
             max_tokens=150  # Adjust the number of tokens as needed
         )
