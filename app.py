@@ -5,7 +5,7 @@ import requests
 
 # Set your OpenAI API key (for security, consider using st.secrets or environment variables)
 
-openai.api_key = st.secrets('api_key')
+openai.api_key = st.secrets['api_key']
 
 #"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"
 
