@@ -9,19 +9,18 @@ openai.api_key = st.secrets['api_key']
 
 def get_openai_response(prompt):
     try:
-        # Make a request to OpenAI's chat/completions endpoint
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # You can change this to another model if needed
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
+        # Make a request to OpenAI's completions endpoint
+        response = openai.Completion.create(
+            model="text-davinci-003",  # Use the appropriate model, e.g., "text-davinci-003"
+            prompt=prompt,
+            max_tokens=150  # Adjust the number of tokens as needed
         )
-        return response.choices[0].message['content']
+        return response.choices[0].text.strip()
     except Exception as e:
         return f"An error occurred: {e}"
 
 # Streamlit UI
-st.title("OpenAI Chat Completion with Streamlit")
+st.title("OpenAI Completion with Streamlit")
 
 # Input from the user
 user_prompt = st.text_area("Enter your prompt:", "Hello, how are you?")
@@ -35,7 +34,6 @@ if st.button("Get Response"):
         result = get_openai_response(user_prompt)
         st.write("Response from OpenAI:")
         st.write(result)
-
 
 
 
