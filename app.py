@@ -1,4 +1,4 @@
-import OpenAI
+import openai
 import streamlit as st
 import json
 import requests
