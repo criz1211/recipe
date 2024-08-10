@@ -5,33 +5,35 @@ import requests
 
 # Set up your OpenAI API key
 #openai.api_key = os.getenv('OPENAI_API_KEY')
-openai.api_key = st.secrets['api_key']
+#openai.api_key = st.secrets['api_key']
 
+st.title("ChatGPT-like clone")
 
-def get_openai_response(prompt):
-    try:
-        # Make a request to OpenAI's completions endpoint
-        response = openai.Completion.create(
-            model="gpt-3.5-turbo",  # Or another model if required
-            prompt=prompt,
-            max_tokens=150  # Adjust the number of tokens as needed
+client = OpenAI(api_key=st.secrets['api_key'])
+
+if "openai_model" not in st.session_state:
+    st.session_state["openai_model"] = "gpt-3.5-turbo"
+
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+if prompt := st.chat_input("What is up?"):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    with st.chat_message("assistant"):
+        stream = client.chat.completions.create(
+            model=st.session_state["openai_model"],
+            messages=[
+                {"role": m["role"], "content": m["content"]}
+                for m in st.session_state.messages
+            ],
+            stream=True,
         )
-        return response.choices[0].text.strip()
-    except Exception as e:
-        return f"An error occurred: {e}"
-
-# Streamlit UI
-st.title("OpenAI Completion with Streamlit")
-
-# Input from the user
-user_prompt = st.text_area("Enter your prompt:", "Hello, how are you?")
-
-# Button to submit the request
-if st.button("Get Response"):
-    if not openai.api_key:
-        st.error("API key is not set. Please set the OPENAI_API_KEY environment variable.")
-    else:
-        # Get the response from OpenAI
-        result = get_openai_response(user_prompt)
-        st.write("Response from OpenAI:")
-        st.write(result)
+        response = st.write_stream(stream)
+    st.session_state.messages.append({"role": "assistant", "content": response})
